@@ -1,9 +1,8 @@
 # DEscrow
 
-### Features
+## Features
 
 The seller creates a deal smart contract through the factory contract, and pledges the agreed number of tokens to the deal smart contract. After the buyer and the seller agree to complete the deal or cancel the deal, the pledged token will be returned to the accounts of both parties, otherwise the token will always be stored in the smart contract.
-
 
 ## Factory contract API
 
@@ -11,7 +10,7 @@ The seller creates a deal smart contract through the factory contract, and pledg
 
 ### Create Deal interface
 
-| Param | desc |
+| Param | Desc |
 | ---- | ---- |
 | _personA  | Is the seller account address. |
 | _personB  | Is the buyer's account address. |
