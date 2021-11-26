@@ -78,7 +78,6 @@ contract Factory is IFactory, Ownable {
         return fee;
     }
 
-    // 代理扣钱, 只能由deal合约调用。
     function deposit(address token, address from, uint256 amount) public override {
         require( isDeal[msg.sender] == true, 'Factory: deal deposit error!');
         _safeTransfer(token, from, msg.sender, amount);

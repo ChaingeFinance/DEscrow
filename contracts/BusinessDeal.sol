@@ -16,8 +16,8 @@ contract BusinessDeal {
   struct Deal {
     address personA;
     address personB;
-    address dealToken; // 交易的token
-    uint256 dealAmount; // 交易的数量
+    address dealToken; 
+    uint256 dealAmount;
     address tokenA;
     address tokenB;
     uint256 tokenAAmount;
@@ -84,17 +84,17 @@ contract BusinessDeal {
   function cancel() public {
       if(status == 1 && msg.sender == deal.personA) {
         refund();
-        status = 0; // 状态回归为0，
+        status = 0;
         return;
       }
 
       if(status == 2) {
         if(deal.personA == msg.sender && confirmCancel[deal.personB]) {
           refund();
-          status = 0; // 状态回归为0，
+          status = 0;
         } else if(deal.personB == msg.sender && confirmCancel[deal.personA]) {
           refund();
-          status = 0; // 状态回归为0，
+          status = 0;
         }
         else {
           confirmCancel[msg.sender] = true;
