@@ -12,6 +12,7 @@ The seller creates a deal smart contract through the factory contract, and pledg
 ### Create Deal interface
 
 | Param | desc |
+| ---- | ---- |
 | _personA  | Is the seller account address. |
 | _personB  | Is the buyer's account address. |
 | _dealToken  |  Is the contract address of the deal token, if the deal is not a token, you can pass address(0). |
@@ -21,7 +22,6 @@ The seller creates a deal smart contract through the factory contract, and pledg
 | _tokenAAmount  |  The number of tokens pledged by the seller |
 | _tokenBAmount  | The number of tokens pledged by the buyer |
 | time  | Current timestamp |
-
 
 ```solidity
  function createDeal(address _personA, address _personB, address _dealToken, uint256 dealAmount, address _tokenA, address _tokenB, uint256 _tokenAAmount, uint256 _tokenBAmount, uint256 time) public returns (address businessDeal) 
@@ -34,8 +34,6 @@ The seller creates a deal smart contract through the factory contract, and pledg
 ```
 
 ## BusinessDeal contract API
-
->  Deal Code
 
 Called when the seller creates a contract through the factory, initializes a deal, and transfers the seller’s margin and deal token to the deal contract account at the same time
 
