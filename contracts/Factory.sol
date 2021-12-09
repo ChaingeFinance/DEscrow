@@ -19,6 +19,8 @@ contract Factory is IFactory, Ownable {
 
     uint256 public fee = 995;
 
+    mapping (address => uint256) public customizeFee;
+
     address public feeTo;
 
     bytes4 SELECTOR = bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));
@@ -70,16 +72,20 @@ contract Factory is IFactory, Ownable {
         return feeTo;
     }
     // Setting of fee. If you set a fee of 0.5%, then fee = 995
-    function setFee(uint8 _fee) public onlyOwner {
-        fee = _fee;
+    function setFee(uint8 _fee, address _token) public onlyOwner {
+        if(_token == address(0)) {
+              fee = _fee;
+        }else{
+            customizeFee[_token] = fee;
+        }
     }
 
-    function getFee() public view override returns(uint256) {
-        return fee;
+    function getFee(address _token) public view override returns(uint256) {
+        return customizeFee[_token] == address(0) ? fee: customizeFee[_token];
     }
 
     function deposit(address token, address from, uint256 amount) public override {
-        require( isDeal[msg.sender] == true, 'Factory: deal deposit error!');
+        require(isDeal[msg.sender] == true, 'Factory: deal deposit error!');
         _safeTransfer(token, from, msg.sender, amount);
     }
 

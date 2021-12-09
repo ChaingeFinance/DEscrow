@@ -10,7 +10,7 @@ contract BusinessDeal {
   event Deposit(address indexed from, uint256 indexed amount);
 
   address public factory;
-     
+
   bytes4 SELECTOR = bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));
 
   struct Deal {
@@ -38,10 +38,8 @@ contract BusinessDeal {
   }
 
   function initialize(address _personA, address _personB, address _dealToken, uint256 _dealAmount, address _tokenA, address _tokenB, uint256 _tokenAAmount, uint256 _tokenBAmount, uint256 _time) public {
-    require(msg.sender == factory, 'ChaingeOption: FORBIDDEN');
-    require(_tokenAAmount != 0 || _tokenBAmount != 0, 'The amount cannot be 0');
+    require(msg.sender == factory, 'Chainge: FORBIDDEN');
     deal = Deal( _personA, _personB, _dealToken, _dealAmount, _tokenA , _tokenB, _tokenAAmount,  _tokenBAmount, _time);
-
 
     _addDealToken();
     if( deal.tokenAAmount > 0) {
@@ -108,7 +106,14 @@ contract BusinessDeal {
     if( deal.tokenAAmount > 0) _safeTransfer(deal.tokenA, address(this), deal.personA, deal.tokenAAmount);
     if( deal.tokenBAmount > 0) _safeTransfer(deal.tokenB, address(this), deal.personB, deal.tokenBAmount);
 
-    uint256 fee = IFactory(factory).getFee();
+    uint256 fee;
+
+    if(deal.tokenA == deal.tokenB) {
+      fee = IFactory(factory).getFee(deal.tokenA);
+    }else {
+      fee = IFactory(factory).getFee(address(0));
+    }
+
     address feeTo = IFactory(factory).getFeeTo();
     uint256 dealAmount =  deal.dealAmount;
 
