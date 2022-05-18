@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.7.6;
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 import './BusinessDeal.sol';
 
@@ -28,7 +28,7 @@ contract Factory is IFactory, Ownable {
     constructor() {
     }
 
-    function createDeal(address _personA, address _personB, address _dealToken, uint256 dealAmount, address _tokenA, address _tokenB, uint256 _tokenAAmount, uint256 _tokenBAmount, uint256 time) public override returns (address businessDeal) {
+    function createDeal(address _personA, address _personB, address _dealToken, uint256 dealAmount, address _tokenA, uint256 _tokenAAmount, address _tokenB,  uint256 _tokenBAmount, uint256 time) public override returns (address businessDeal) {
         require( _personA  != address(0) , 'Chainge: ZERO_ADDRESS');
         require( _personB  != address(0) , 'Chainge: ZERO_ADDRESS');
         require( _tokenA   != address(0) , 'Chainge: ZERO_ADDRESS');
@@ -52,14 +52,14 @@ contract Factory is IFactory, Ownable {
 
         business[tokenHash] = businessDeal;
 
-        BusinessDeal(businessDeal).initialize(_personA, _personB, _dealToken, dealAmount, _tokenA, _tokenB, _tokenAAmount, _tokenBAmount, time);
+        BusinessDeal(businessDeal).initialize(_personA, _personB, _dealToken, dealAmount, _tokenA,  _tokenAAmount,  _tokenB,_tokenBAmount, time);
 
         feeTo = owner();
         
         emit CreateDeal(_personA, _personB, time);
     }
 
-    function getDeal(address _personA, address _personB, address _dealToken, uint256 dealAmount, address _tokenA, address _tokenB, uint256 _tokenAAmount, uint256 _tokenBAmount, uint256 time) public view override returns(address) {
+    function getDeal(address _personA, address _personB, address _dealToken, uint256 dealAmount, address _tokenA, uint256 _tokenAAmount, address _tokenB,  uint256 _tokenBAmount, uint256 time) public view override returns(address) {
         bytes32 tokenHash = keccak256(abi.encodePacked(_personA, _personB, _dealToken, dealAmount,  _tokenA, _tokenB, _tokenAAmount, _tokenBAmount, time));
         return business[tokenHash];
     }
@@ -72,16 +72,16 @@ contract Factory is IFactory, Ownable {
         return feeTo;
     }
     // Setting of fee. If you set a fee of 0.5%, then fee = 995
-    function setFee(uint8 _fee, address _token) public onlyOwner {
+    function setFee(uint256 _fee, address _token) public onlyOwner {
         if(_token == address(0)) {
               fee = _fee;
         }else{
-            customizeFee[_token] = fee;
+            customizeFee[_token] = _fee;
         }
     }
 
     function getFee(address _token) public view override returns(uint256) {
-        return customizeFee[_token] == address(0) ? fee: customizeFee[_token];
+        return _token == address(0) ? fee: customizeFee[_token];
     }
 
     function deposit(address token, address from, uint256 amount) public override {
