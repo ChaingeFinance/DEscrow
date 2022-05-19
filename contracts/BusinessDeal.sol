@@ -33,12 +33,12 @@ contract BusinessDeal {
   
   mapping (address => bool) public confirmCancel;
 
-  constructor() public {
+  constructor() {
     factory = msg.sender;
   }
 
   function initialize(address _personA, address _personB, address _dealToken, uint256 _dealAmount, address _tokenA, uint256 _tokenAAmount, address _tokenB, uint256 _tokenBAmount, uint256 _time) public {
-    require(msg.sender == factory, 'Chainge: FORBIDDEN');
+    require(msg.sender == factory, 'Deal: FORBIDDEN');
     deal = Deal( _personA, _personB, _dealToken, _dealAmount, _tokenA , _tokenB, _tokenAAmount,  _tokenBAmount, _time);
 
     _addDealToken();
@@ -97,7 +97,7 @@ contract BusinessDeal {
         }
         return;
       }
-      require(false, 'cancel: Abnormal transaction!');
+      require(false, 'cancel: abnormal transaction!');
   }
 
   function payment() private {
@@ -136,10 +136,6 @@ contract BusinessDeal {
       }
   }
 
-  // function _safeTransfer(address _token, address _to, uint value) private {
-  //   (bool success, bytes memory data) = _token.call(abi.encodeWithSelector(SELECTOR, _to, value));
-  //   require(success && (data.length == 0 || abi.decode(data, (bool))), 'BusinessDeal: transfer failed');
-  // }
   function _safeTransfer(address _token, address _to, uint value) private {
      IFRC759(_token).transfer(_to, value);
   }
